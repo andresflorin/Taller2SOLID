@@ -6,15 +6,15 @@ public class Usuario {
     private String nombreCompleto;
     private Rol rol;
     private EstadoUsuario estado;
-    private String password;
+    private String passwordHash;
 
     public Usuario(String login, String nombreCompleto, Rol rol,
-                   EstadoUsuario estado, String password) {
+                   EstadoUsuario estado, String passwordHash) {
         this.login = login;
         this.nombreCompleto = nombreCompleto;
         this.rol = rol;
         this.estado = estado;
-        this.password = password;
+        this.passwordHash = passwordHash;
     }
 
     public String getLogin() {
@@ -33,7 +33,7 @@ public class Usuario {
         return estado;
     }
 
-    public String getPassword() {
-        return password;
+    public String getPasswordHash() {
+        return passwordHash;
     }
 }
