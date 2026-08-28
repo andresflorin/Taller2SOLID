@@ -3,7 +3,11 @@ package co.edu.unicauca.solid.repository;
 import co.edu.unicauca.solid.domain.EstadoUsuario;
 import co.edu.unicauca.solid.domain.Rol;
 import co.edu.unicauca.solid.domain.Usuario;
+import co.edu.unicauca.solid.database.DatabaseConnection;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -13,11 +17,25 @@ class SQLiteUsuarioRepositoryTest {
 
     private SQLiteUsuarioRepository repository;
 
-    @BeforeEach
-    void configurar() {
-        repository = new SQLiteUsuarioRepository();
-    }
+   @BeforeEach
+void configurar() {
 
+    repository = new SQLiteUsuarioRepository();
+
+    String sql = "DELETE FROM usuarios";
+
+    try (Connection connection = DatabaseConnection.getConnection();
+         PreparedStatement statement =
+                 connection.prepareStatement(sql)) {
+
+        statement.executeUpdate();
+
+    } catch (SQLException e) {
+        throw new RuntimeException(
+                "Error al limpiar la base de datos de prueba.", e
+        );
+    }
+}
     @Test
     void deberiaGuardarYBuscarUsuario() {
 
