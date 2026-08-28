@@ -1,5 +1,7 @@
 package co.edu.unicauca.solid.config;
 
+import co.edu.unicauca.solid.database.DatabaseConnection;
+import co.edu.unicauca.solid.database.DatabaseConnectionProvider;
 import co.edu.unicauca.solid.repository.SQLiteUsuarioRepository;
 import co.edu.unicauca.solid.repository.UsuarioRepository;
 import co.edu.unicauca.solid.security.Argon2PasswordHasher;
@@ -15,19 +17,22 @@ public class AppConfig {
 
     public static UsuarioService crearUsuarioService() {
 
-        UsuarioRepository usuarioRepository =
-                new SQLiteUsuarioRepository();
+    DatabaseConnectionProvider connectionProvider =
+            new DatabaseConnection();
 
-        PasswordHasher passwordHasher =
-                new Argon2PasswordHasher();
+    UsuarioRepository usuarioRepository =
+            new SQLiteUsuarioRepository(connectionProvider);
 
-        PasswordValidator passwordValidator =
-                new DefaultPasswordValidator();
+    PasswordHasher passwordHasher =
+            new Argon2PasswordHasher();
 
-        return new UsuarioService(
-                usuarioRepository,
-                passwordHasher,
-                passwordValidator
-        );
-    }
+    PasswordValidator passwordValidator =
+            new DefaultPasswordValidator();
+
+    return new UsuarioService(
+            usuarioRepository,
+            passwordHasher,
+            passwordValidator
+    );
+}
 }

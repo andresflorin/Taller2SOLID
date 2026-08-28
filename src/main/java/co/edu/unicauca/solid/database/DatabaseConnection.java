@@ -4,14 +4,12 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class DatabaseConnection {
+public class DatabaseConnection implements DatabaseConnectionProvider {
 
     private static final String URL = "jdbc:sqlite:solid.db";
 
-    private DatabaseConnection() {
-    }
-
-    public static Connection getConnection() throws SQLException {
+    @Override
+    public Connection getConnection() throws SQLException {
         return DriverManager.getConnection(URL);
     }
 }

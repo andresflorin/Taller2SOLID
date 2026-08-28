@@ -1,6 +1,7 @@
 package co.edu.unicauca.solid.repository;
 
 import co.edu.unicauca.solid.database.DatabaseConnection;
+import co.edu.unicauca.solid.database.DatabaseConnectionProvider;
 import co.edu.unicauca.solid.domain.EstadoUsuario;
 import co.edu.unicauca.solid.domain.Rol;
 import co.edu.unicauca.solid.domain.Usuario;
@@ -13,7 +14,12 @@ import java.util.Optional;
 
 public class SQLiteUsuarioRepository implements UsuarioRepository {
 
-    public SQLiteUsuarioRepository() {
+    private final DatabaseConnectionProvider connectionProvider;
+
+    public SQLiteUsuarioRepository(
+            DatabaseConnectionProvider connectionProvider) {
+
+        this.connectionProvider = connectionProvider;
         crearTabla();
     }
 
@@ -29,7 +35,8 @@ public class SQLiteUsuarioRepository implements UsuarioRepository {
                 )
                 """;
 
-        try (Connection connection = DatabaseConnection.getConnection();
+        try (Connection connection =
+                     connectionProvider.getConnection();
              PreparedStatement statement =
                      connection.prepareStatement(sql)) {
 
@@ -41,7 +48,6 @@ public class SQLiteUsuarioRepository implements UsuarioRepository {
             );
         }
     }
-
     @Override
     public void guardar(Usuario usuario) {
 
@@ -51,9 +57,10 @@ public class SQLiteUsuarioRepository implements UsuarioRepository {
                 VALUES (?, ?, ?, ?, ?)
                 """;
 
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement =
-                     connection.prepareStatement(sql)) {
+       try (Connection connection =
+             connectionProvider.getConnection();
+     PreparedStatement statement =
+             connection.prepareStatement(sql)) {
 
             statement.setString(1, usuario.getLogin());
             statement.setString(2, usuario.getNombreCompleto());
@@ -79,9 +86,10 @@ public class SQLiteUsuarioRepository implements UsuarioRepository {
                 WHERE login = ?
                 """;
 
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement =
-                     connection.prepareStatement(sql)) {
+        try (Connection connection =
+             connectionProvider.getConnection();
+     PreparedStatement statement =
+             connection.prepareStatement(sql)) {
 
             statement.setString(1, login);
 

@@ -1,15 +1,17 @@
 package co.edu.unicauca.solid.repository;
 
+import co.edu.unicauca.solid.database.DatabaseConnection;
+import co.edu.unicauca.solid.database.DatabaseConnectionProvider;
 import co.edu.unicauca.solid.domain.EstadoUsuario;
 import co.edu.unicauca.solid.domain.Rol;
 import co.edu.unicauca.solid.domain.Usuario;
-import co.edu.unicauca.solid.database.DatabaseConnection;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -17,25 +19,31 @@ class SQLiteUsuarioRepositoryTest {
 
     private SQLiteUsuarioRepository repository;
 
-   @BeforeEach
-void configurar() {
+    @BeforeEach
+    void configurar() {
 
-    repository = new SQLiteUsuarioRepository();
+        DatabaseConnectionProvider connectionProvider =
+                new DatabaseConnection();
 
-    String sql = "DELETE FROM usuarios";
+        repository =
+                new SQLiteUsuarioRepository(connectionProvider);
 
-    try (Connection connection = DatabaseConnection.getConnection();
-         PreparedStatement statement =
-                 connection.prepareStatement(sql)) {
+        String sql = "DELETE FROM usuarios";
 
-        statement.executeUpdate();
+        try (Connection connection =
+                     connectionProvider.getConnection();
+             PreparedStatement statement =
+                     connection.prepareStatement(sql)) {
 
-    } catch (SQLException e) {
-        throw new RuntimeException(
-                "Error al limpiar la base de datos de prueba.", e
-        );
+            statement.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(
+                    "Error al limpiar la base de datos de prueba.", e
+            );
+        }
     }
-}
+
     @Test
     void deberiaGuardarYBuscarUsuario() {
 
