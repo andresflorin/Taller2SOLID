@@ -1,6 +1,6 @@
 package co.edu.unicauca.solid.repository;
 
-import co.edu.unicauca.solid.database.DatabaseConnection;
+
 import co.edu.unicauca.solid.database.DatabaseConnectionProvider;
 import co.edu.unicauca.solid.domain.EstadoUsuario;
 import co.edu.unicauca.solid.domain.Rol;

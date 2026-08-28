@@ -137,4 +137,23 @@ class UsuarioServiceTest {
                 )
         );
     }
+    @Test
+void deberiaAutenticarUsuarioConRolDocente() {
+
+    usuarioService.registrarUsuario(
+            "docente",
+            "Docente de Prueba",
+            Rol.DOCENTE,
+            EstadoUsuario.ACTIVO,
+            "Docente123!"
+    );
+
+    Usuario usuario =
+            usuarioService.autenticar(
+                    "docente",
+                    "Docente123!"
+            );
+
+    assertEquals(Rol.DOCENTE, usuario.getRol());
+}
 }
